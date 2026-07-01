@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>오늘 얼마 벌었나 💸</title>
+<!-- ===== Google AdSense =====
+     승인 후, 아래 ca-pub-XXXXXXXXXXXXXXXX 를 본인 게시자 ID로 교체하세요.
+     이 <script> 태그가 사이트 소유 확인(인증) 코드도 겸합니다. -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1123012824257753" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card2: #273449;
+    --accent: #22c55e;
+    --accent2: #38bdf8;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+    background: radial-gradient(1200px 600px at 50% -10%, #1e293b 0%, var(--bg) 55%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; }
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    margin: 8px 0 4px;
+  }
+  .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 13px; color: var(--muted); }
+  input {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 15px;
+    width: 100%;
+  }
+  input:focus { outline: none; border-color: var(--accent2); }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Result */
+  .status {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #334155;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .status.working { background: rgba(34,197,94,0.18); color: #4ade80; }
+  .status.lunch   { background: rgba(251,191,36,0.18); color: #fbbf24; }
+  .status.before  { background: rgba(56,189,248,0.18); color: #38bdf8; }
+  .status.done    { background: rgba(148,163,184,0.18); color: #cbd5e1; }
+
+  .earned-label { font-size: 13px; color: var(--muted); }
+  .earned {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 2px 0 4px;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .per-sec { font-size: 13px; color: var(--muted); }
+  .per-sec b { color: var(--accent2); }
+
+  .bar {
+    height: 10px; background: var(--card2); border-radius: 999px;
+    overflow: hidden; margin: 16px 0 6px;
+  }
+  .bar > i {
+    display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 999px; transition: width 0.4s ease;
+  }
+  .barmeta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+  .stat {
+    background: var(--card2); border-radius: 12px; padding: 12px 14px;
+  }
+  .stat .k { font-size: 12px; color: var(--muted); }
+  .stat .v { font-size: 18px; font-weight: 700; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+  .foot { text-align: center; font-size: 12px; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- ===== 상단 광고 (AdSense) =====
+       승인 후 data-ad-client(ca-pub-...) 와 data-ad-slot 값을 본인 것으로 교체하세요.
+       승인 전에는 빈 공간으로 보입니다. -->
+  <ins class="adsbygoogle"
+       style="display:block; margin-bottom:18px; min-height:60px;"
+       data-ad-client="ca-pub-1123012824257753"
+       data-ad-slot="XXXXXXXXXX"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <h1>오늘 얼마 벌었나 💸</h1>
+  <div class="sub">월급을 넣으면 지금 이 순간까지 번 돈(세전)을 실시간으로 보여줘요</div>
+
+  <!-- 설정 -->
+  <div class="card">
+    <div class="grid">
+      <div class="field">
+        <label>출근 시간</label>
+        <input type="time" id="clockIn" value="09:00" />
+      </div>
+      <div class="field">
+        <label>퇴근 시간</label>
+        <input type="time" id="clockOut" value="18:00" />
+      </div>
+      <div class="field">
+        <label>점심 시작</label>
+        <input type="time" id="lunchStart" value="12:00" />
+      </div>
+      <div class="field">
+        <label>점심 끝</label>
+        <input type="time" id="lunchEnd" value="13:00" />
+      </div>
+      <div class="field full">
+        <label>월급 (세전, 원)</label>
+        <input type="text" inputmode="numeric" id="salary" placeholder="예: 3,000,000" />
+      </div>
+      <div class="field full">
+        <label>이번 달 업무일수 (일)</label>
+        <input type="number" id="workDays" min="1" max="31" step="1" />
+        <div class="hint" id="workDaysHint">주말 제외 자동 계산됨 · 공휴일/연차가 있으면 직접 수정하세요</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결과 -->
+  <div class="card">
+    <span class="status before" id="status">대기 중</span>
+    <div class="earned-label">지금까지 번 돈 (세전)</div>
+    <div class="earned" id="earned">₩0</div>
+    <div class="per-sec">초당 <b id="perSec">₩0</b> · 시간당 <b id="perHour">₩0</b></div>
+
+    <div class="bar"><i id="barFill"></i></div>
+    <div class="barmeta">
+      <span id="barLeft">근무 진행률 0%</span>
+      <span id="barRight">퇴근까지 --:--</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="k">세전 하루 급여</div>
+        <div class="v" id="daily">₩0</div>
+      </div>
+      <div class="stat">
+        <div class="k">순 근무시간 / 일</div>
+        <div class="v" id="netHours">0시간</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    입력값은 이 브라우저에 자동 저장돼요 ·
+    <a href="privacy.html" style="color:#38bdf8;">개인정보처리방침</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const ids = ["clockIn", "clockOut", "lunchStart", "lunchEnd", "salary", "workDays"];
+  const KEY = "howmuch.settings.v1";
+
+  // 시간 문자열 "HH:MM" -> 오늘 기준 초
+  function toSec(t) {
+    if (!t) return null;
+    const [h, m] = t.split(":").map(Number);
+    return h * 3600 + m * 60;
+  }
+
+  // 이번 달 평일 수 (월~금)
+  function weekdaysThisMonth() {
+    const now = new Date();
+    const y = now.getFullYear(), mo = now.getMonth();
+    const days = new Date(y, mo + 1, 0).getDate();
+    let c = 0;
+    for (let d = 1; d <= days; d++) {
+      const wd = new Date(y, mo, d).getDay();
+      if (wd !== 0 && wd !== 6) c++;
+    }
+    return c;
+  }
+
+  const won = (n) => "₩" + Math.round(n).toLocaleString("ko-KR");
+
+  // 월급 입력칸 콤마 서식 (숫자만 남기고 3자리 구분)
+  function formatSalaryInput() {
+    const el = $("salary");
+    const digits = el.value.replace(/[^0-9]/g, "");
+    el.value = digits ? Number(digits).toLocaleString("ko-KR") : "";
+  }
+
+  function fmtDuration(sec) {
+    sec = Math.max(0, Math.round(sec));
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+    return `${m}:${String(s).padStart(2,"0")}`;
+  }
+
+  // 저장 / 복원
+  function save() {
+    const data = {};
+    ids.forEach((id) => (data[id] = $(id).value));
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+  function load() {
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+    ids.forEach((id) => { if (data[id] != null && data[id] !== "") $(id).value = data[id]; });
+    if (!$("workDays").value) $("workDays").value = weekdaysThisMonth();
+  }
+
+  // [a,b) 와 [c,d) 겹치는 초
+  function overlap(a, b, c, d) {
+    return Math.max(0, Math.min(b, d) - Math.max(a, c));
+  }
+
+  function tick() {
+    const inS = toSec($("clockIn").value);
+    const outS = toSec($("clockOut").value);
+    let lStart = toSec($("lunchStart").value);
+    let lEnd = toSec($("lunchEnd").value);
+    const salary = parseFloat($("salary").value.replace(/[^0-9]/g, "")) || 0;
+    const workDays = parseInt($("workDays").value, 10) || weekdaysThisMonth();
+
+    // 점심시간이 근무시간 밖이면 무시
+    if (lStart == null || lEnd == null || lEnd <= lStart) { lStart = 0; lEnd = 0; }
+    const lunchInWork = overlap(inS ?? 0, outS ?? 0, lStart, lEnd);
+
+    const netWork = Math.max(0, (outS ?? 0) - (inS ?? 0) - lunchInWork); // 하루 순근무 초
+    const dailyPay = workDays > 0 ? salary / workDays : 0;
+    const perSec = netWork > 0 ? dailyPay / netWork : 0;
+
+    // 현재 시각(초)
+    const now = new Date();
+    const nowS = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+    // 지금까지 일한 순근무 초
+    let workedNet = 0, status = "before", statusText = "출근 전";
+    if (inS == null || outS == null || outS <= inS) {
+      statusText = "시간 설정 필요";
+      status = "before";
+    } else if (nowS < inS) {
+      status = "before"; statusText = "출근 전";
+      workedNet = 0;
+    } else if (nowS >= outS) {
+      status = "done"; statusText = "근무 종료 🎉";
+      workedNet = netWork;
+    } else {
+      // 근무 중
+      const elapsed = nowS - inS;
+      const lunchDone = overlap(inS, nowS, lStart, lEnd);
+      workedNet = Math.max(0, elapsed - lunchDone);
+      if (nowS >= lStart && nowS < lEnd) {
+        status = "lunch"; statusText = "점심시간 🍚";
+      } else {
+        status = "working"; statusText = "근무 중 🔥";
+      }
+    }
+
+    const earned = perSec * workedNet;
+    const progress = netWork > 0 ? Math.min(100, (workedNet / netWork) * 100) : 0;
+
+    // 렌더
+    $("status").className = "status " + status;
+    $("status").textContent = statusText;
+    $("earned").textContent = won(earned);
+    $("perSec").textContent = won(perSec);
+    $("perHour").textContent = won(perSec * 3600);
+    $("daily").textContent = won(dailyPay);
+    $("netHours").textContent = (netWork / 3600).toFixed(1) + "시간";
+
+    $("barFill").style.width = progress.toFixed(1) + "%";
+    $("barLeft").textContent = "근무 진행률 " + progress.toFixed(1) + "%";
+
+    if (inS != null && outS != null && outS > inS) {
+      if (nowS < inS) $("barRight").textContent = "출근까지 " + fmtDuration(inS - nowS);
+      else if (nowS >= outS) $("barRight").textContent = "퇴근 완료";
+      else $("barRight").textContent = "퇴근까지 " + fmtDuration(outS - nowS);
+    } else {
+      $("barRight").textContent = "--:--";
+    }
+  }
+
+  // 이벤트 바인딩
+  ids.forEach((id) => $(id).addEventListener("input", () => {
+    if (id === "salary") formatSalaryInput();
+    save(); tick();
+  }));
+
+  load();
+  formatSalaryInput();
+  $("workDaysHint").textContent =
+    "이번 달 평일 " + weekdaysThisMonth() + "일 기준 · 공휴일/연차가 있으면 직접 수정하세요";
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>
